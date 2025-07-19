@@ -1,0 +1,7 @@
+const url = `https://americas.api.riotgames.com/lol/match/v5/matches/BR1_3119822507`;
+
+fetch(url, {
+    headers: {
+        'X-Riot-Token': apiKey
+    }
+})
