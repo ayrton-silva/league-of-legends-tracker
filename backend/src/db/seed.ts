@@ -10,6 +10,7 @@ await seed(db, schema).refine((f) => {
       count: 10,
       columns: {
         puuid: f.uuid(),
+        tagname: f.email(),
         nickname: f.firstName(),
         region: f.country({ isUnique: false }),
       },
