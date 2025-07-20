@@ -1,1 +1,0 @@
-ALTER TABLE "summoners" ADD COLUMN "tagname" text;

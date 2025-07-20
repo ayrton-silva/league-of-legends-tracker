@@ -9,4 +9,10 @@ GET {{baseUrl}}/health
 
 # Get summoners
 # @name getSummonersByNicknameAndTagname
-GET {{baseUrl}}/summoners/Sakai Moka/japao
+GET {{baseUrl}}/summoners/out of ur misery/br1
+
+###
+
+# Get summoners
+# @name getMatchesIdBySummoner
+GET {{baseUrl}}/matches/puuid

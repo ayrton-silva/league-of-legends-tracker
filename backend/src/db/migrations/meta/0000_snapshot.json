@@ -1,9 +1,99 @@
 {
-  "id": "16d09c39-b212-4ddd-9b6c-1d953c9c85d9",
+  "id": "aa7e8022-d94e-49bb-ab0c-ee91c23fa488",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
+    "public.leagues": {
+      "name": "leagues",
+      "schema": "",
+      "columns": {
+        "leagueid": {
+          "name": "leagueid",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "queuetype": {
+          "name": "queuetype",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tier": {
+          "name": "tier",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ranking": {
+          "name": "ranking",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "league_points": {
+          "name": "league_points",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "wins": {
+          "name": "wins",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "losses": {
+          "name": "losses",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "puuid": {
+          "name": "puuid",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "leagues_puuid_summoners_puuid_fk": {
+          "name": "leagues_puuid_summoners_puuid_fk",
+          "tableFrom": "leagues",
+          "tableTo": "summoners",
+          "columnsFrom": [
+            "puuid"
+          ],
+          "columnsTo": [
+            "puuid"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "leagues_tier_unique": {
+          "name": "leagues_tier_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "tier"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.summoners": {
       "name": "summoners",
       "schema": "",
@@ -16,6 +106,12 @@
         },
         "nickname": {
           "name": "nickname",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tagname": {
+          "name": "tagname",
           "type": "text",
           "primaryKey": false,
           "notNull": false
