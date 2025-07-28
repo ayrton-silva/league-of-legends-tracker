@@ -6,6 +6,8 @@ type SummonerDataParams = {
   nickname: string
   tagname: string
   region?: string
+  profileIconId: number
+  level: number
 }
 
 export async function saveSummoner({
@@ -13,6 +15,8 @@ export async function saveSummoner({
   nickname,
   tagname,
   region = 'Brazil',
+  level,
+  profileIconId
 }: SummonerDataParams) {
   const result = await db
     .insert(schema.summoners)
@@ -21,6 +25,8 @@ export async function saveSummoner({
       nickname,
       tagname,
       region,
+      level,
+      profileIconId
     })
     .returning()
 

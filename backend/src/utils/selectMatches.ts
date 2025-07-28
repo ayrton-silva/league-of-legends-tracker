@@ -1,18 +1,12 @@
-import { and, eq } from 'drizzle-orm'
+import { eq } from 'drizzle-orm'
 import { db } from '../db/connection.ts'
 import { schema } from '../db/schema/index.ts'
 
 type SelectSummonersParams = {
-  nickname: string
-  tagname: string
-  region: string
+  puuid: string
 }
 
-export async function selectSummoners({
-  nickname,
-  tagname,
-  region
-}: SelectSummonersParams) {
+export async function selectMatches({ puuid }: SelectSummonersParams) {
   const result = await db
     .select({
       puuid: schema.summoners.puuid,
@@ -22,13 +16,7 @@ export async function selectSummoners({
       updatedAt: schema.summoners.updatedAt,
     })
     .from(schema.summoners)
-    .where(
-      and(
-        eq(schema.summoners.nickname, nickname),
-        eq(schema.summoners.tagname, tagname),
-        eq(schema.summoners.region, region)
-      )
-    )
+    .where(eq(schema.matches, puuid))
 
   return result
 }

@@ -1,11 +1,9 @@
 import axios from 'axios'
 import { env } from '../env.ts'
 import { saveSummoner } from './saveSummoner.ts'
-import { fetchSummonerIconAndLevel } from './fetchSummonerIconAndLevel.ts'
 
-type FetchSummonerParams = {
-  nickname: string
-  tagname: string
+type FetchMatchesParams = {
+  puuid: string
   region?: string
 }
 
@@ -15,18 +13,15 @@ type SummonerResponse = {
   tagLine: string
 }
 
-export async function fetchSummoner({
-  nickname,
-  tagname,
-  region = 'BR',
-}: FetchSummonerParams) {
+export async function fetchMatches({
+  puuid,
+  region = 'americas',
+}: FetchMatchesParams) {
   try {
-    const regionURL = region == 'BR' ? 'americas' : 'europe'
-
     const summonerResponse = await axios.get(
-      `/riot/account/v1/accounts/by-riot-id/${nickname}/${tagname}`,
+      `/lol/match/v5/matches/by-puuid/${puuid}/ids`,
       {
-        baseURL: `https://${regionURL}.api.riotgames.com`,
+        baseURL: `https://${region}.api.riotgames.com`,
         headers: {
           'X-Riot-Token': env.RIOT_API_KEY,
         },
@@ -39,18 +34,11 @@ export async function fetchSummoner({
       return null
     }
 
-    // Busca ícones e nível do invocador
-    const iconAndLevelResponse = await fetchSummonerIconAndLevel({puuid: summonerData.puuid})
-
-    if (!iconAndLevelResponse) return null
-
     const result = await saveSummoner({
       nickname: summonerData.gameName,
       tagname: summonerData.tagLine,
       puuid: summonerData.puuid,
-      level: iconAndLevelResponse.summonerLevel,
-      profileIconId: iconAndLevelResponse.profileIconId
-    })    
+    })
 
     return result.length > 0 ? result : null
   } catch (err) {

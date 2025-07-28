@@ -13,6 +13,10 @@ GET {{baseUrl}}/summoners/out of ur misery/br1
 
 ###
 
+@puuid = {{ getSummonersByNicknameAndTagname.response.body.$.puuid }}
+
+###
+
 # Get summoners
 # @name getMatchesIdBySummoner
-GET {{baseUrl}}/matches/puuid
+GET {{baseUrl}}/matches/{{puuid}}

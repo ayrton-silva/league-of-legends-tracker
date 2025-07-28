@@ -4,25 +4,26 @@ import { selectSummoners } from '../../utils/selectSummoners.ts'
 import { z } from 'zod/v4'
 
 export const getSummonerRoute: FastifyPluginCallbackZod = (app) => {
-  app.get(
-    '/summoners/:nickname/:tagname',
+  app.post(
+    '/summoners',
     {
       schema: {
-        params: z.object({
+        body: z.object({
           nickname: z.string(),
           tagname: z.string(),
+          region: z.string(),
         }),
       },
     },
     async (request) => {
-      const { nickname, tagname } = request.params
-      const summoners = await selectSummoners({ nickname, tagname })
+      const { nickname, tagname, region } = request.body
+      const summoner = await selectSummoners({ nickname, tagname, region })
 
-      if (summoners.length > 0) {
-        return summoners
+      if (summoner.length > 0) {
+        return summoner
       }
 
-      const summonerByApi = await fetchSummoner({ nickname, tagname })
+      const summonerByApi = await fetchSummoner({ nickname, tagname, region })
       return summonerByApi ? summonerByApi : null
     }
   )

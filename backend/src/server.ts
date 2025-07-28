@@ -6,7 +6,7 @@ import {
   type ZodTypeProvider,
 } from 'fastify-type-provider-zod'
 import { env } from './env.ts'
-import { getSummonersRoute } from './http/routes/get-summoners-by-nickname.ts'
+import { getSummonersRoute } from './http/routes/get-summoners.ts'
 import { getSummonerRoute } from './http/routes/get-summoner-by-nickname-and-tagname.ts'
 
 const app = fastify().withTypeProvider<ZodTypeProvider>()
