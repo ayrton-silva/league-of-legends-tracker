@@ -1,7 +1,9 @@
 import axios from 'axios'
-import { env } from '../env.ts'
-import { saveSummoner } from './saveSummoner.ts'
+import { env } from '../../env.ts'
+import { saveSummoner } from '../../storage/saveSummoner.ts'
 import { fetchSummonerIconAndLevel } from './fetchSummonerIconAndLevel.ts'
+import { fetchSummonerLeagues } from './fetchSummonerLeagues.ts'
+import { upsertSummonerLeagues } from '../../storage/upsertLeagues.ts'
 
 type FetchSummonerParams = {
   nickname: string
@@ -42,7 +44,7 @@ export async function fetchSummoner({
     // Busca ícones e nível do invocador
     const iconAndLevelResponse = await fetchSummonerIconAndLevel({puuid: summonerData.puuid})
 
-    if (!iconAndLevelResponse) return null
+    if (!iconAndLevelResponse) return null 
 
     const result = await saveSummoner({
       nickname: summonerData.gameName,
@@ -51,6 +53,19 @@ export async function fetchSummoner({
       level: iconAndLevelResponse.summonerLevel,
       profileIconId: iconAndLevelResponse.profileIconId
     })    
+
+        // Busca liga (elo) do jogador
+    const leaguesResponse = await fetchSummonerLeagues({puuid: summonerData.puuid})
+
+    if (!leaguesResponse) return null
+    console.log('leagues response', leaguesResponse)
+    
+    leaguesResponse.map(async (league) => {
+      console.log('leagues id', league)
+
+      await upsertSummonerLeagues({leagueId: league.leagueId, hotStreak: league.hotStreak, leaguePoints: league.leaguePoints, losses: league.losses, puuid: league.puuid, queueType: league.queueType, rank: league.rank, tier: league.tier, wins: league.wins})
+    })
+
 
     return result.length > 0 ? result : null
   } catch (err) {

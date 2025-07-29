@@ -1,6 +1,6 @@
 import type { FastifyPluginCallbackZod } from 'fastify-type-provider-zod'
 import { z } from 'zod/v4'
-import { selectMatches } from '../../utils/selectMatches.ts'
+import { selectMatches } from '../../storage/selectMatches.ts'
 
 export const getMatchesRoute: FastifyPluginCallbackZod = (app) => {
   app.get(

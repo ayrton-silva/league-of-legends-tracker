@@ -1,6 +1,6 @@
 import type { FastifyPluginCallbackZod } from 'fastify-type-provider-zod'
-import { fetchSummoner } from '../../utils/fetchSummoner.ts'
-import { selectSummoners } from '../../utils/selectSummoners.ts'
+import { fetchSummoner } from '../../services/riot/fetchSummoner.ts'
+import { selectSummoners } from '../../storage/selectSummoners.ts'
 import { z } from 'zod/v4'
 
 export const getSummonerRoute: FastifyPluginCallbackZod = (app) => {

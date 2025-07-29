@@ -1,22 +1,18 @@
 import axios from 'axios'
-import { env } from '../env.ts'
-import { saveSummoner } from './saveSummoner.ts'
+import { env } from '../../env.ts'
+import { saveSummoner } from '../../storage/saveSummoner.ts'
 
-type FetchMatchesParams = {
+type FetchSummonerMatchesParams = {
   puuid: string
   region?: string
 }
 
-type SummonerResponse = {
-  puuid: string
-  gameName: string
-  tagLine: string
-}
+type SummonerMatchesResponse = string[]
 
 export async function fetchMatches({
   puuid,
   region = 'americas',
-}: FetchMatchesParams) {
+}: FetchSummonerMatchesParams) {
   try {
     const summonerResponse = await axios.get(
       `/lol/match/v5/matches/by-puuid/${puuid}/ids`,
@@ -28,7 +24,7 @@ export async function fetchMatches({
       }
     )
 
-    const summonerData: SummonerResponse = summonerResponse.data
+    const summonerData: SummonerMatchesResponse = summonerResponse.data
 
     if (!summonerData) {
       return null

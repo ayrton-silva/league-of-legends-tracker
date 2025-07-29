@@ -1,7 +1,7 @@
 import axios from 'axios'
-import { env } from '../env.ts'
+import { env } from '../../env.ts'
 
-type FetchSummonerLevelAndIcon = {
+type FetchSummonerLevelAndIconRequest = {
   puuid: string
 }
 
@@ -10,7 +10,7 @@ type SummonerIconAndLevelResponse = {
   summonerLevel: number
 }
 
-export async function fetchSummonerIconAndLevel({puuid}: FetchSummonerLevelAndIcon) {
+export async function fetchSummonerIconAndLevel({puuid}: FetchSummonerLevelAndIconRequest) {
   try {
 
     const summonerResponse = await axios.get(
