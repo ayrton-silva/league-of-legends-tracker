@@ -1,18 +1,13 @@
 import { and, eq } from 'drizzle-orm'
 import { db } from '../db/connection.ts'
 import { schema } from '../db/schema/index.ts'
+import type { GetSummonerRequest } from '../types/requests/get-summoners-request.ts'
 
-type SelectSummonersParams = {
-  nickname: string
-  tagname: string
-  region: string
-}
-
-export async function selectSummoners({
+export async function selectSummoner({
   nickname,
   tagname,
-  region
-}: SelectSummonersParams) {
+  region,
+}: GetSummonerRequest) {
   const result = await db
     .select({
       puuid: schema.summoners.puuid,

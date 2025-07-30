@@ -1,23 +1,15 @@
 import { db } from '../db/connection.ts'
 import { schema } from '../db/schema/index.ts'
+import type { Summoner } from '../types/riot/summoner.ts'
 
-type SummonerDataParams = {
-  puuid: string
-  nickname: string
-  tagname: string
-  region?: string
-  profileIconId: number
-  level: number
-}
-
-export async function saveSummoner({
+export async function upsertSummoner({
   puuid,
   nickname,
   tagname,
   region = 'Brazil',
   level,
-  profileIconId
-}: SummonerDataParams) {
+  profileIconId,
+}: Summoner) {
   const result = await db
     .insert(schema.summoners)
     .values({
@@ -26,7 +18,7 @@ export async function saveSummoner({
       tagname,
       region,
       level,
-      profileIconId
+      profileIconId,
     })
     .returning()
 

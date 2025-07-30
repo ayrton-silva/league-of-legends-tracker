@@ -1,22 +1,16 @@
 import axios from 'axios'
 import { env } from '../../env.ts'
+import type { GetSummonerLevelAndIcon } from '../../types/requests/get-summoner-level-and-icon-request.ts'
+import type { SummonerIconAndLevelResponse } from '../../types/responses/summoner-icon-and-level-response.ts'
 
-type FetchSummonerLevelAndIconRequest = {
-  puuid: string
-}
-
-type SummonerIconAndLevelResponse = {
-  profileIconId: number
-  summonerLevel: number
-}
-
-export async function fetchSummonerIconAndLevel({puuid}: FetchSummonerLevelAndIconRequest) {
+export async function fetchSummonerIconAndLevel({
+  puuid,
+}: GetSummonerLevelAndIcon) {
   try {
-
     const summonerResponse = await axios.get(
       `/lol/summoner/v4/summoners/by-puuid/${puuid}`,
       {
-        baseURL: `https://br1.api.riotgames.com`,
+        baseURL: 'https://br1.api.riotgames.com',
         headers: {
           'X-Riot-Token': env.RIOT_API_KEY,
         },
