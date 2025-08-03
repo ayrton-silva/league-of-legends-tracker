@@ -16,6 +16,12 @@ export async function fetchSummoner({
   try {
     const regionURL = region === 'BR' ? 'americas' : 'europe'
 
+    console.log(`=== BUSCANDO SUMMONER ===`)
+    console.log(`Nickname: ${nickname}`)
+    console.log(`Tagname: ${tagname}`)
+    console.log(`Region: ${region}`)
+    console.log(`URL: https://${regionURL}.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${nickname}/${tagname}`)
+
     const summonerResponse = await axios.get(
       `/riot/account/v1/accounts/by-riot-id/${nickname}/${tagname}`,
       {
@@ -28,7 +34,19 @@ export async function fetchSummoner({
 
     const summonerData: SummonerResponse = summonerResponse.data
 
+    console.log(`=== DADOS DO SUMMONER ===`)
+    console.log(`PUUID: ${summonerData.puuid}`)
+    console.log(`GameName: ${summonerData.gameName}`)
+    console.log(`TagLine: ${summonerData.tagLine}`)
+    console.log(`Tamanho do PUUID: ${summonerData.puuid?.length}`)
+
     if (!summonerData) {
+      return null
+    }
+
+    // Validar PUUID
+    if (!summonerData.puuid || summonerData.puuid.length < 70) {
+      console.error('PUUID inválido ou muito curto:', summonerData.puuid)
       return null
     }
 
@@ -67,8 +85,14 @@ export async function fetchSummoner({
 
     return result.length > 0 ? result : null
   } catch (err) {
-    // biome-ignore lint/suspicious/noConsole: only for dev
-    console.log(err)
+    console.error('=== ERRO AO BUSCAR SUMMONER ===')
+    console.error('Erro:', err.message)
+    
+    if (err.response) {
+      console.error('Status:', err.response.status)
+      console.error('Dados:', err.response.data)
+    }
+    
     return null
   }
 }

@@ -8,6 +8,8 @@ import {
 import { env } from './env.ts'
 import { getSummonersRoute } from './http/routes/get-summoners.ts'
 import { getSummonerRoute } from './http/routes/get-summoner-by-nickname-and-tagname.ts'
+import { getMatchesRoute } from './http/routes/get-matches.ts'
+import { getSummonerLeaguesRoute } from './http/routes/get-summoner-leagues.ts'
 
 const app = fastify().withTypeProvider<ZodTypeProvider>()
 
@@ -24,5 +26,7 @@ app.get('/health', () => {
 
 app.register(getSummonersRoute)
 app.register(getSummonerRoute)
+app.register(getMatchesRoute)
+app.register(getSummonerLeaguesRoute)
 
 app.listen({ port: env.PORT })

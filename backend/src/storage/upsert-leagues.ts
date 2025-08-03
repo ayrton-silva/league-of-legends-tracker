@@ -13,20 +13,35 @@ export async function upsertSummonerLeagues({
   losses,
   hotStreak,
 }: SummonerLeague) {
-  const result = await db
-    .insert(schema.leagues)
-    .values({
-      league_id: leagueId,
-      queue_type: queueType,
-      tier: tier,
-      ranking: rank,
-      league_points: leaguePoints,
-      wins: wins,
-      losses: losses,
-      hot_streak: hotStreak,
-      puuid: puuid,
-    })
-    .returning()
+  try {
+    const result = await db
+      .insert(schema.leagues)
+      .values({
+        league_id: leagueId,
+        queue_type: queueType,
+        tier: tier,
+        ranking: rank,
+        league_points: leaguePoints,
+        wins: wins,
+        losses: losses,
+        hot_streak: hotStreak,
+        puuid: puuid,
+      })
+      .onConflictDoUpdate({
+        target: schema.leagues.league_id,
+        set: {
+          league_points: leaguePoints,
+          wins: wins,
+          losses: losses,
+          hot_streak: hotStreak,
+        },
+      })
+      .returning()
 
-  return result
+    return result
+  } catch (error) {
+    // biome-ignore lint/suspicious/noConsole: only for dev
+    console.error('Erro ao salvar league:', error)
+    return null
+  }
 }

@@ -1,26 +1,25 @@
 import { db } from '../db/connection.ts'
 import { schema } from '../db/schema/index.ts'
-import type { Summoner } from '../types/riot/summoner.ts'
 
-export async function upsertSummoner({
-  puuid,
-  nickname,
-  tagname,
-  region = 'Brazil',
-  level,
-  profileIconId,
-}: Summoner) {
-  const result = await db
+export async function upsertSummoner(summonerData: {
+  puuid: string
+  nickname: string
+  tagname: string
+  region: string
+  profileIconId: number
+  level: number
+}) {
+  return await db
     .insert(schema.summoners)
-    .values({
-      puuid,
-      nickname,
-      tagname,
-      region,
-      level,
-      profileIconId,
+    .values(summonerData)
+    .onConflictDoUpdate({
+      target: schema.summoners.puuid,
+      set: {
+        nickname: summonerData.nickname,
+        tagname: summonerData.tagname,
+        profileIconId: summonerData.profileIconId,
+        level: summonerData.level,
+        updatedAt: new Date(),
+      },
     })
-    .returning()
-
-  return result
 }

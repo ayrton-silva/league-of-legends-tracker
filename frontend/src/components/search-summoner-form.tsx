@@ -13,7 +13,7 @@ import {
 import {
   Form,
   FormControl,
-  FormField, 
+  FormField,
   FormItem,
   FormLabel,
   FormMessage,
@@ -28,13 +28,13 @@ const createRoomSchema = z.object({
 type CreateRoomFormData = z.infer<typeof createRoomSchema>
 
 export function SearchSummonerForm() {
-  const { mutateAsync: createRoom } = useCreateRoom()
+  const { mutateAsync: createRoom, isPending } = useCreateRoom()
 
   const createRoomForm = useForm<CreateRoomFormData>({
     resolver: zodResolver(createRoomSchema),
     defaultValues: {
       nickAndTag: '',
-      region: 'BR'
+      region: 'BR',
     },
   })
 
@@ -49,9 +49,7 @@ export function SearchSummonerForm() {
     <Card>
       <CardHeader>
         <CardTitle>Buscar usuário</CardTitle>
-        <CardDescription>
-          
-        </CardDescription>
+        <CardDescription></CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...createRoomForm}>
@@ -67,10 +65,7 @@ export function SearchSummonerForm() {
                   <FormItem>
                     <FormLabel>Nome do invocador + Tag</FormLabel>
                     <FormControl>
-                      <Input
-                        {...field}
-                        placeholder="Nick#BR1"
-                      />
+                      <Input {...field} placeholder="Nick#BR1" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -79,7 +74,7 @@ export function SearchSummonerForm() {
             />
 
             <Button className="w-full" type="submit">
-              Buscar invocador
+              {isPending ? 'Buscando...' : 'Buscar invocador'}
             </Button>
           </form>
         </Form>
